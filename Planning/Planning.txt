@@ -1,0 +1,37 @@
+TicTacToe
+Planning
+
+Core Logic 0.1
+
+array of 9 objects 3x3
+9 turns total
+2 players
+
+8 possible win conditions
+OOO   ###   ###   O##   #O#   ##O   O##   ##O
+###   OOO   ###   O##   #O#   ##O   #O#   #O#
+###   ###   OOO   O##   #O#   ##O   ##O   O##
+
+
+Variables
+
+bool playerTurn
+int gameTurn
+button[] gameButtons
+
+
+Pseudocode
+
+each turns
+    if gameTurn > 9
+        the board is filled, draw
+    else
+        check playerTurn
+        player presses button
+        check board for win condition
+        if win
+            playerTurn wins
+        else
+            playerTurn flips
+            gameTurn++
+            next turn
