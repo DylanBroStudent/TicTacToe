@@ -41,15 +41,28 @@ const readline = require('readline').createInterface({
 //reset and initialise the menu
 //called at the start of the program
 const initialiseMenu = () => {
-    gameTurn = 0
-    gameState = [0,0,0,0,0,0,0,0,0]
-    console.log('MAIN MENU')
+    console.log('---MAIN MENU---')
     console.log('1 : Player vs Player')
     console.log('2 : Player vs AI')
     console.log('3 : Quit')
     readline.question('Your selection: ', selection => {
-        console.log(selection)
-        readline.close()
+        selection = selection.trim()
+        switch (selection) {
+            case ('1'):
+                readline.close()
+                break
+            case ('2'):
+                readline.close()
+                break
+            case ('3'):
+                console.log('---QUITTING GAME---')
+                readline.close()
+                break
+            default:
+                console.log('---INVALID SELECTION---')
+                initialiseMenu()
+                break
+        }
     })
 }
 
