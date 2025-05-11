@@ -130,6 +130,7 @@ const getRandomInput = () => {
     switch (winner) {
         case 2:
             //AI wins
+            displayBoard()
             console.log('---AI WINS---')
             initialiseMenu()
             break
