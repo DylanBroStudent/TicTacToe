@@ -12,11 +12,11 @@ let gameState = [
 ]
 
 // INDEX MAP    INPUT MAP
-// 0 | 1 | 2    1 | 2 | 3
+// 0 | 1 | 2    7 | 8 | 9 
 // ---------    ---------
 // 3 | 4 | 5    4 | 5 | 6
 // ---------    ---------
-// 6 | 7 | 8    7 | 8 | 9
+// 6 | 7 | 8    1 | 2 | 3
 
 
 //win conditions are a nested array/matrix
@@ -36,7 +36,6 @@ const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout
 })
-
 
 //initialise the menu
 //called at the start of the program
@@ -110,7 +109,6 @@ const turn = () => {
         }
     }
 }
-
 
 const getRandomInput = () => {
     //first find valid moves
@@ -194,7 +192,6 @@ const getPlayerInput = (player) => {
     })
 }
 
-
 //Display a visual depiction of the game state
 const displayBoard = () => {
     //translate from state to symbol
@@ -249,8 +246,6 @@ const checkWinConditions = () => {
     //if no win condition found return 0
     return 0
 }
-
-
 
 //------------//
 
