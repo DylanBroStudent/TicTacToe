@@ -21,16 +21,14 @@ let gameState = [
 
 //win conditions are a nested array/matrix
 let winConditions = [
-    [
-        [0,1,2],
-        [3,4,5],
-        [6,7,8],
-        [0,3,6],
-        [1,4,5],
-        [2,5,8],
-        [0,4,8],
-        [2,4,6]
-    ]
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,3,6],
+    [1,4,7],
+    [2,5,8],
+    [0,4,8],
+    [2,4,6]
 ]
 
 //set up readline from node to allow input
@@ -93,7 +91,12 @@ const initialisePvEGame = () =>{
 //turn logic
 const turn = () => {
     displayBoard()
-    switch (checkTurn()){
+    if (gameTurn > 9){
+        //game board is full - draw
+        console.log('---GAME DRAW---')
+        initialiseMenu()
+    } else {
+        switch (checkTurn()){
         case 1:
             //Player 1's Turn
             console.log("It is Player 1's turn")
@@ -112,8 +115,8 @@ const turn = () => {
                     //AI's turn
                     break
             }
+        }
     }
-    
 }
 
 const getPlayerInput = (player) => {
@@ -134,10 +137,17 @@ const getPlayerInput = (player) => {
                 }
                 //check for win
                 let winner = checkWinConditions()
+                console.log(winner)
                 switch (winner){
                     case 1:
+                        //Player 1 wins
+                        console.log('---PLAYER 1 WINS---')
+                        initialiseMenu()
                         break
                     case 2:
+                        //Player 2 wins
+                        console.log('---PLAYER 2 WINS---')
+                        initialiseMenu()
                         break
                     default:
                         break
@@ -199,6 +209,17 @@ const checkTurn = () => {
 //call at the end of the turn to see if the player has won
 const checkWinConditions = () => {
     //find win condition, then check who won
+    console.log('checking win conditions')
+    for (let i = 0; i < winConditions.length; i++) {
+        //establish variables
+        let condition = winConditions[i]
+        let a = gameState[condition[0]]
+        let b = gameState[condition[1]]
+        let c = gameState[condition[2]]
+
+        if (a !== 0 && a === b && a === c)
+    }
+    
     for (let i = 0; i < winConditions.length; i++) {
         let condition = winConditions[i]
         if (compareGridSquares(gameState[condition[0]], gameState[condition[1]], gameState[condition[2]])) {
@@ -207,10 +228,11 @@ const checkWinConditions = () => {
                 case 1:
                     console.log("Player 1 wins!");
                     return 1
+                    
                 case 2:
                     console.log("Player 2 wins!");
                     return 2
-        
+                    
             }
         }
     }
