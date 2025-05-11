@@ -16,8 +16,8 @@ let gameState = [
 // ---------    ---------
 // 6 | 7 | 8    7 | 8 | 9
 
-//Square state - 0 = empty, 1 = X, 2 = 0
 
+//win conditions are a nested array/matrix
 let winConditions = [
     [
         [0,1,2],
@@ -31,21 +31,42 @@ let winConditions = [
     ]
 ]
 
+//set up readline from node to allow input
+const readline = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
+
+
+//reset and initialise the menu
+//called at the start of the program
+const initialiseMenu = () => {
+    gameTurn = 0
+    gameState = [0,0,0,0,0,0,0,0,0]
+    console.log('MAIN MENU')
+    console.log('1 : Player vs Player')
+    console.log('2 : Player vs AI')
+    console.log('3 : Quit')
+    readline.question('Your selection: ', selection => {
+        console.log(selection)
+        readline.close()
+    })
+}
+
+
+
+
 //clear the board and initialise the game
 const initialiseGame = () =>{
-    playerTurn = true
     gameTurn = 0
-    gameSquares.forEach(square => {
-        square.state = 0
-    });
-    console.log(playerTurn, gameTurn, gameSquares)
+    gameState = [0,0,0,0,0,0,0,0,0]
 }
 
 //turn logic
 const turn = () => {}
 
 //call at the end of the turn to see if the player has won
-const checkWinConditions = () => { 
+const checkWinConditions = () => {
     //find win condition, then check who won
     switch (winConditions.find((c) => compareGridSquares(gameState[c[0]],gameState[c[1]],gameState[c[2]]))){
         case 1:
@@ -55,6 +76,7 @@ const checkWinConditions = () => {
             //player 2 wins!
             break
     }
+}
 
 //compare three values and return true if they match and aren't 0
 const compareGridSquares = (a,b,c) => {
@@ -64,3 +86,12 @@ const compareGridSquares = (a,b,c) => {
         return false
     }
 }
+
+
+
+//------------//
+
+//Initialisation
+initialiseMenu()
+
+//------------//
