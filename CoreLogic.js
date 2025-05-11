@@ -50,11 +50,15 @@ const initialiseMenu = () => {
         switch (selection) {
             case ('1'):
                 console.log('---PLAYER VS PLAYER---')
-                initialisePvPGame()
+                gameMode = 1
+                resetGame()
+                turn()
                 break
             case ('2'):
                 console.log('---PLAYER VS AI---')
-                initialisePvEGame()
+                gameMode = 2
+                resetGame()
+                turn()
                 break
             case ('3'):
                 console.log('---QUITTING GAME---')
@@ -72,20 +76,6 @@ const initialiseMenu = () => {
 const resetGame = () => {
     gameTurn = 1
     gameState = [0,0,0,0,0,0,0,0,0]
-}
-
-//clear the board and initialise the game for Player vs Player
-const initialisePvPGame = () =>{
-    resetGame()
-    gameMode = 1
-    turn()
-}
-
-//clear the board and initialise the game for Player vs AI
-const initialisePvEGame = () =>{
-    resetGame()
-    gameMode = 2
-    turn()
 }
 
 //turn logic
@@ -113,9 +103,43 @@ const turn = () => {
                     break
                 case 2:
                     //AI's turn
+                    console.log("It's the AI's turn")
+                    getRandomInput()
                     break
             }
         }
+    }
+}
+
+
+const getRandomInput = () => {
+    //first find valid moves
+    let emptySquares = []
+    for (let i = 0; i < gameState.length; i++){
+        if (gameState[i] === 0) {
+            emptySquares.push(i)
+        }
+    }
+    //select a random valid move
+    let randomMove = Math.floor(Math.random() * emptySquares.length)
+    let selection = emptySquares[randomMove]
+    //write new game state
+    gameState[selection] = 2
+    console.log('AI has selected:', selection + 1)
+
+    //check for win
+    let winner = checkWinConditions()
+    switch (winner) {
+        case 2:
+            //AI wins
+            console.log('---AI WINS---')
+            initialiseMenu()
+            break
+        default:
+            //no win - next turn
+            gameTurn++
+            turn()
+            break
     }
 }
 
@@ -131,30 +155,32 @@ const getPlayerInput = (player) => {
                 //position is empty
                 //write new game state
                 if (player == 1) {
-                    gameState[selection] = 'X'
+                    gameState[selection] = 1
                 } else {
-                    gameState[selection] = 'O'
+                    gameState[selection] = 2
                 }
                 //check for win
                 let winner = checkWinConditions()
-                console.log(winner)
                 switch (winner){
                     case 1:
                         //Player 1 wins
+                        displayBoard()
                         console.log('---PLAYER 1 WINS---')
                         initialiseMenu()
                         break
                     case 2:
                         //Player 2 wins
+                        displayBoard()
                         console.log('---PLAYER 2 WINS---')
                         initialiseMenu()
                         break
                     default:
+                        //next turn
+                        gameTurn++
+                        turn()
                         break
                 }
-                //next turn
-                gameTurn++
-                turn()
+                
             } else {
                 //position is already taken
                 console.log('---SELECTION ALREADY TAKEN---')
