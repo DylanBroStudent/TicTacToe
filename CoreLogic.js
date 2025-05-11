@@ -209,44 +209,19 @@ const checkTurn = () => {
 //call at the end of the turn to see if the player has won
 const checkWinConditions = () => {
     //find win condition, then check who won
-    console.log('checking win conditions')
     for (let i = 0; i < winConditions.length; i++) {
         //establish variables
         let condition = winConditions[i]
         let a = gameState[condition[0]]
         let b = gameState[condition[1]]
         let c = gameState[condition[2]]
-
-        if (a !== 0 && a === b && a === c)
-    }
-    
-    for (let i = 0; i < winConditions.length; i++) {
-        let condition = winConditions[i]
-        if (compareGridSquares(gameState[condition[0]], gameState[condition[1]], gameState[condition[2]])) {
-            let winner = gameState[condition[0]]
-            switch (winner) {
-                case 1:
-                    console.log("Player 1 wins!");
-                    return 1
-                    
-                case 2:
-                    console.log("Player 2 wins!");
-                    return 2
-                    
-            }
+        //compare three values and return the value if they match and aren't 0
+        if (a !== 0 && a === b && a === c){
+            return a
         }
     }
     //if no win condition found return 0
     return 0
-}
-
-//compare three values and return true if they match and aren't 0
-const compareGridSquares = (a,b,c) => {
-    if (a === b && a === c && a !== 0){
-        return true
-    } else {
-        return false
-    }
 }
 
 
