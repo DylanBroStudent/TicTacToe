@@ -1,7 +1,9 @@
 
 //variables
 
-let gameTurn = 0
+let gameTurn = 1
+let playerTurn = 1
+let gameMode = 0
 
 let gameState = [
     0,0,0,
@@ -38,7 +40,7 @@ const readline = require('readline').createInterface({
 })
 
 
-//reset and initialise the menu
+//initialise the menu
 //called at the start of the program
 const initialiseMenu = () => {
     console.log('---MAIN MENU---')
@@ -49,10 +51,12 @@ const initialiseMenu = () => {
         selection = selection.trim()
         switch (selection) {
             case ('1'):
-                readline.close()
+                console.log('---PLAYER VS PLAYER---')
+                initialisePvPGame()
                 break
             case ('2'):
-                readline.close()
+                console.log('---PLAYER VS AI---')
+                initialisePvEGame()
                 break
             case ('3'):
                 console.log('---QUITTING GAME---')
@@ -66,30 +70,140 @@ const initialiseMenu = () => {
     })
 }
 
-
-
-
-//clear the board and initialise the game
-const initialiseGame = () =>{
-    gameTurn = 0
+//clears the game variables ready to play a new round
+const resetGame = () => {
+    gameTurn = 1
     gameState = [0,0,0,0,0,0,0,0,0]
 }
 
+//clear the board and initialise the game for Player vs Player
+const initialisePvPGame = () =>{
+    resetGame()
+    gameMode = 1
+    turn()
+}
+
+//clear the board and initialise the game for Player vs AI
+const initialisePvEGame = () =>{
+    resetGame()
+    gameMode = 2
+    turn()
+}
+
 //turn logic
-const turn = () => {}
+const turn = () => {
+    displayBoard()
+    switch (checkTurn()){
+        case 1:
+            //Player 1's Turn
+            console.log("It is Player 1's turn")
+            console.log("select an empty spot on the grid")
+            getPlayerInput(checkTurn())
+            break
+        case 2:
+            switch (gameMode){
+                case 1:
+                    //Player 2's Turn if playing against another player
+                    console.log("It is Player 2's turn")
+                    console.log("select an empty spot on the grid")
+                    getPlayerInput(checkTurn())
+                    break
+                case 2:
+                    //AI's turn
+                    break
+            }
+    }
+    
+}
+
+const getPlayerInput = (player) => {
+    readline.question('Your selection: ', selection =>{
+        //clean selection and adjust from displayState to internal gameState
+        selection.trim()
+        selection = selection -1
+        if (selection >= 0 && selection <= 9){
+            //valid input
+            //check if selection is already taken
+            if (gameState[selection] == 0){
+                //position is empty
+                //write new game state
+                if (player == 1) {
+                    gameState[selection] = 'X'
+                } else {
+                    gameState[selection] = 'O'
+                }
+                //next turn
+                gameTurn++
+                turn()
+            } else {
+                //position is already taken
+                console.log('---SELECTION ALREADY TAKEN---')
+                turn()
+            }
+        } else {
+            //invalid input
+            console.log("---INVALID INPUT---")
+            turn()
+        }
+    })
+}
+
+
+//Display a visual depiction of the game state
+const displayBoard = () => {
+    //translate from state to symbol
+    let displayState = [...gameState]
+    for (let i = 0; i < 9; i++) {
+        switch (displayState[i]) {
+            case 0:
+                //empty space - populate with number corresponding to selection input
+                displayState[i] = (i +1).toString()
+                break
+            case 1:
+                //Player 1 space - X
+                displayState[i] = 'X'
+                break
+            case 2:
+                //Player 2 space - O
+                displayState[i] = 'O'
+                break
+        }
+    }
+    //print the final display
+    
+    console.log(displayState[6],displayState[7],displayState[8])
+    console.log(displayState[3],displayState[4],displayState[5])
+    console.log(displayState[0],displayState[1],displayState[2])
+}
+
+const checkTurn = () => {
+    if (gameTurn % 2 != 0) {
+        //odd gameTurn - Player 1
+        return 1
+    } else {
+        //even gameTurn - Player 2
+        return 2
+    }
+}
 
 //call at the end of the turn to see if the player has won
 const checkWinConditions = () => {
     //find win condition, then check who won
-    switch (winConditions.find((c) => compareGridSquares(gameState[c[0]],gameState[c[1]],gameState[c[2]]))){
-        case 1:
-            //player 1 wins!
-            break
-        case 2:
-            //player 2 wins!
-            break
+    winConditions.forEach(condition => {
+        if (compareGridSquares(gameState[condition[0]], gameState[condition[1]], gameState[condition[2]])) {
+            let winner = gameState[condition[0]]
+            switch (winner) {
+                case 1:
+                    console.log("Player 1 wins!");
+                    return 1;
+                case 2:
+                    console.log("Player 2 wins!");
+                    return 2;
+        
+                }
+            }
+        })
     }
-}
 
 //compare three values and return true if they match and aren't 0
 const compareGridSquares = (a,b,c) => {
